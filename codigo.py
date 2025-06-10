@@ -40,11 +40,11 @@ def gerar_pdf(nome, dias, horas, media, maximo, minimo, avaliacao, nome_pdf, ima
 # 🧠 Função que avalia o desempenho da semana com base na média de estudo
 def avaliar_semana(media):
     if media >= 6:
-        return "Excelente ritmo de estudos!"
+        return "Excelente ritmo de estudos! Continue assim e você estará cada vez mais perto dos seus objetivos. 💪📘"
     elif media >= 4:
-        return "Bom, mas pode melhorar!"
+        return "Bom trabalho, mas você pode melhorar! Tente organizar melhor sua rotina para ganhar mais consistência. 🚀"
     else:
-        return "Procure se organizar melhor."
+        return "Você estudou pouco essa semana. Procure estabelecer metas diárias e focar no seu objetivo. Você consegue! 🌱📚"
 
 # 🖼️ Configuração da interface do Streamlit
 st.set_page_config(page_title="Analisador de Estudos", layout="centered")
@@ -75,6 +75,14 @@ if submitted:
         minimo = np.min(horas_estudo)
         avaliacao = avaliar_semana(media)
 
+        # 📋 Avaliação antes do gráfico
+        st.subheader("📋 Avaliação da Semana")
+        st.markdown(f"""
+**Média de estudo por dia:** {media:.2f} horas  
+**Resumo:** {avaliacao}
+""")
+
+        # 📈 Gráfico
         st.subheader("📈 Gráfico de Estudo")
         fig = gerar_grafico(dias_semana, horas_estudo)
         st.pyplot(fig)
