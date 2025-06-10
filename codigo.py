@@ -24,8 +24,8 @@ def gerar_grafico(dias, horas):
     )
     return fig
 
-# 📄 Função que gera o PDF com dados convertidos em ASCII
-def gerar_pdf(nome_aluno, dias_semana, horas_estudo, media, maximo, minimo, avaliacao, nome_pdf):
+# 📄 Função que gera o PDF com dados convertidos em ASCII e inclui o gráfico
+def gerar_pdf(nome_aluno, dias_semana, horas_estudo, media, maximo, minimo, avaliacao, nome_pdf, img_grafico):
     pdf = FPDF()
     pdf.add_page()
     pdf.set_font("Arial", size=12)
@@ -46,6 +46,11 @@ def gerar_pdf(nome_aluno, dias_semana, horas_estudo, media, maximo, minimo, aval
     pdf.cell(200, 10, txt=f"Maximo: {maximo:.2f} horas", ln=True)
     pdf.cell(200, 10, txt=f"Minimo: {minimo:.2f} horas", ln=True)
     pdf.cell(200, 10, txt=f"Avaliacao: {avaliacao_ascii}", ln=True)
+
+    pdf.ln(10)  # Espaço antes da imagem
+
+    # Insere a imagem do gráfico no PDF
+    pdf.image(img_grafico, x=10, w=pdf.w - 20)  # Largura do gráfico = largura da página menos margens
 
     pdf.output(nome_pdf)
 
@@ -102,16 +107,16 @@ if submitted:
         st.subheader("📈 Gráfico de Estudo")
         st.plotly_chart(fig, use_container_width=True)
 
-        # Salvar gráfico como imagem
+        # Salvar gráfico como imagem PNG para inserir no PDF
         img_path = "grafico_estudos.png"
         fig.write_image(img_path, format="png")
 
-        # Preparar nome do PDF
+        # Preparar nome do PDF com timestamp
         data = datetime.now().strftime("%Y-%m-%d_%H-%M")
         nome_pdf = f"Relatorio_Estudos_{nome_aluno.replace(' ', '_')}_{data}.pdf"
 
         st.write("📄 Gerando PDF...")
-        gerar_pdf(nome_aluno, dias_semana, horas_estudo, media, maximo, minimo, avaliacao, nome_pdf)
+        gerar_pdf(nome_aluno, dias_semana, horas_estudo, media, maximo, minimo, avaliacao, nome_pdf, img_path)
 
         with open(nome_pdf, "rb") as file:
             st.success("✅ Relatório gerado com sucesso!")
