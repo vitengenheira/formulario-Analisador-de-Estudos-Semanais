@@ -1,0 +1,6 @@
+streamlit 
+ numpy 
+matplotlib.pyplot 
+ fpdf
+datetime
+os
